@@ -1,0 +1,66 @@
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 15919 entries, 0 to 15918
+Data columns (total 53 columns):
+ #   Column                         Non-Null Count  Dtype 
+---  ------                         --------------  ----- 
+ 0   url                            15919 non-null  object
+ 1   make_model                     15919 non-null  object
+ 2   short_description              15873 non-null  object
+ 3   body_type                      15859 non-null  object
+ 4   price                          15919 non-null  int64 
+ 5   vat                            11406 non-null  object
+ 6   km                             15919 non-null  object
+ 7   registration                   15919 non-null  object
+ 8   prev_owner                     9091 non-null   object
+ 9   hp                             15919 non-null  object
+ 10  Type                           15917 non-null  object
+ 11  Previous Owners                9279 non-null   object
+ 12  Next Inspection                3535 non-null   object
+ 13  Inspection new                 3932 non-null   object
+ 14  Warranty                       10499 non-null  object
+ 15  Full Service                   8215 non-null   object
+ 16  Non-smoking Vehicle            7177 non-null   object
+ 17  null                           15919 non-null  object
+ 18  Make                           15919 non-null  object
+ 19  Model                          15919 non-null  object
+ 20  Offer Number                   12744 non-null  object
+ 21  First Registration             14322 non-null  object
+ 22  Body Color                     15322 non-null  object
+ 23  Paint Type                     10147 non-null  object
+ 24  Body Color Original            12160 non-null  object
+ 25  Upholstery                     12199 non-null  object
+ 26  Body                           15859 non-null  object
+ 27  Nr. of Doors                   15707 non-null  object
+ 28  Nr. of Seats                   14942 non-null  object
+ 29  Model Code                     4978 non-null   object
+ 30  Gearing Type                   15919 non-null  object
+ 31  Displacement                   15423 non-null  object
+ 32  Cylinders                      10239 non-null  object
+ 33  Weight                         8945 non-null   object
+ 34  Drive chain                    9061 non-null   object
+ 35  Fuel                           15919 non-null  object
+ 36  Consumption                    14013 non-null  object
+ 37  CO2 Emission                   14111 non-null  object
+ 38  Emission Class                 12898 non-null  object
+ 39  
+Comfort & Convenience
+        14999 non-null  object
+ 40  
+Entertainment & Media
+        14545 non-null  object
+ 41  
+Extras
+                       12957 non-null  object
+ 42  
+Safety & Security
+            14937 non-null  object
+ 43  description                    15919 non-null  object
+ 44  Emission Label                 3985 non-null   object
+ 45  Gears                          11207 non-null  object
+ 46  Country version                7586 non-null   object
+ 47  Electricity consumption        137 non-null    object
+ 48  Last Service Date              566 non-null    object
+ 49  Other Fuel Types               880 non-null    object
+ 50  Availability                   635 non-null    object
+ 51  Last Timing Belt Service Date  16 non-null     object
+ 52  Available from                 272 non-null    object

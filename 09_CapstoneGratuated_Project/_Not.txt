@@ -1,0 +1,134 @@
+EDA Projesinde, ilgili sütunların missing value'lerini doldururken, make_model (marka-model) sütununu baz alarak araç markasına göre doldurmaya dikkat edin.
+
+
+Örneğin body_type, Comfort&Convenience, Entertainment&Media, extra veya Safe&Secure gibi birçok sütunun missing value'lerini doldururken bu hususa dikkat edin bence.
+
+Bunu çok kullanacağınız için bir fonksiyon yazarsanız super olur. Mesela; fill_most(a,b,c) isimli bir fonksiyon define edin. fill_most(data, "make_model", "extra") girince "extra" sütunundaki boş değerleri "make_model" sütununda en çok geçen (tekrar eden) değer (mode) ile doldursun.
+Biraz uğraşın, sonra ben kendi yazdığım fonksiyonu paylaşırım sizinle. :man-raising-hand::skin-tone-2:
+
+
+
+EDA Projesinde izlenecek özet yol :
+araba fiyatının belirlenmesine etki etmeyecek olan ve yüksek nan'a sahip olan sütunları düşür
+bozuk formattaki yapıları düzeltip sade ve anlamlı string/numeric değerlere dönüştür
+
+kalan tüm sutunların nan'larını en mantıklı şekilde doldur.
+tüm sutunların numeric değer almasını sağla. (kategorik olan sütunlar get_dummies() ile numeric olacak)
+tüm sutunların outlier'larını gider
+sonuç df'i csv olarak kaydet
+
+
+
+
+
+
+
+
+EDA Projesinde, iç içe listelerde bulunan string değerlere sahip sütunlara (ör: "Comfort&Convenience",
+"extra", "Entertainment&Media" vb..) yönelik şu yolu izleyebilirsiniz :
+
+
+1 - Önce unique string değerleri görebilmek ve kendiniz yorum yapbilmek için unique_values(data, column_name)
+isimli bir fonksiyon tanımlayın. Bunun sonucunda listeler içerisindeki unique string değerleri size liste halinde sunsun. Bu fonksiyon oluşturma ve unique değerleri görme işi yanlızca sizin yorum yapabilme ve analiz yapıp fikir edinmeniz için gerekli. Yoksa zorunlu değil. Çünkü bu sütunu temizleyip, string değerleri listelerin içerisinden çıkarıp, sade string'ler haline getirdikten ve missing value'leri doldurduktan sonra df.str.get_dummies(sep = ",")  syntax'ı ile zaten unique olan değerler otomatik olarak sütun haline dönüşecektir.
+
+
+2- Yukarda belirttiğim, listeler içerisindeki string değerleri dışarı çıkarıp sade string'ler haline getirme nasıl olucak :
+Burada dikkat etmeniz gereken ilk şey sütundaki değerlerin "liste içerisinde mi yoksa dışında mı" durumunu kontrol (condition) ederek; liste içerisinde ise dışarı çıkartılması, sade string halinde ise aynen bırakılması.
+Bu işi yapan syntax'ın içerisinde şöyle şeyler olacak : sade = [xxxxxxxxxxx if type(item) == list else item for item in df["sütun_ismi"]].
+İşte buradan çıkan listeyi df["sütun_ismi"] = pd.DataFrame(sade) ile yeni sütun değerleri olarak atayabilirsiniz.
+
+
+
+Yukardaki işlemden sonra, nan olan değerler boş string haline geleceği için bu boş string'lerin hepsine tekrar np.nan atanması ve bu nan değerlerin dün söylediğim kendi oluşturacağınız fill_most() fonksiyonu ile doldurulması gerekmekte.
+
+Missing value'leri doldurduktan sonra ise önceki maddede belirtilen get_dummies() metodu son noktayı koyacaktır.
+Yoruldum :sweat_smile:
+
+
+
+import warnings
+warnings.filterwarnings('ignore')
+warnings.warn("this will not show")
+@channel Arkadaşlar :slightly_smiling_face: Projelerin çözümlerinde (özellikle EDA) notebook'unuzun en başına yukardaki syntax'ları eklerseniz, warning'ler ve exception error'lar ortaya çıkınca kernel (interpreter)'iniz durmaz, çalışmaya devam eder ve sonuçları göserir. Yani hem uyarı satırlarını hem de çıktı sonuçlarını bir arada görebilmenizi sağlar.
+
+
+
+'Air conditioning,Automatic climate control,Cruise control,Leather steering wheel,Lumbar support,Navigation system,Park Distance Control,Parking assist system sensors rear,Power windows,Seat heating,Start-stop system'
+mesela bu satır; Comfort&Convenience sütununun listeler dışına çıkarılmış sade bir string değeri. Virgüllerle ayrılmış unique değerlerden oluşuyor. @channel
+
+
+
+'Air conditioning,Automatic climate control,Cruise control,Leather steering wheel,Lumbar support,Navigation system,Park Distance Control,Parking assist system sensors rear,Power windows,Seat heating,Start-stop system'
+
+9:44
+Burada virgül şart değil. Başka karakterlerle de ayırabilirsiniz. Ancak bu belirleyeceğiniz karakter (char), daha sonra get_dummies(sep ="char") yaparken kullanacağınız sep değeri ile aynı olmalıdır. @channel
+:heavy_check_mark:
+2
+
+
+
+emel mantık şu :
+araba fiyatının belirlenmesine etki etmeyecek olan ve yüksek nan'a sahip olan sütunları düşür
+
+
+bozuk formattaki yapıları düzeltip sade ve anlamlı string/numeric değerlere dönüştür
+kalan tüm sutunların nan'larını en mantıklı şekilde doldur.
+tüm sutunların numeric değer almasını sağla. (kategorik olan sütunlar get_dummies() ile numeric olacak)
+tüm sutunların outlier'larını gider
+sonuç df'i csv olarak kaydet
+(edited)
+
+
+
+
+
+
+def fill(x,y):
+    a = cars["registration"][(cars["km"] >= x) & (cars["km"] < y) & (cars["registration"] != np.nan)].mode()
+    return cars["registration"][(cars["km"] >= x) & (cars["km"] < y)].fillna(a[0], , inplace = True)
+fill(19400, 21000)
+kayıt bilgisi olmayan araçların km bilgisine göre nan'ları dolduran bir syntex yaptım  ancak fillna içinde inplace =True yazınca NaN'lara herhangi bir atama yapmıyor. İnplace silincede değişiklik kalıcı olmuyor. Sorunu nasıl çözebilirim acaba?
+
+
+a=... diyerek a'ya yeni deger atayin bence inplace=True demenize gerek kalmaz
+
+
+
+cars["registration"][(cars["km"] >= x) & (cars["km"] < y)] = cars["registration"][(cars["km"] >= x) & (cars["km"] < y)].fillna(a[0])
+    return cars["registration"][(cars["km"] >= x) & (cars["km"] < y)]
+
+
+
+EDA çalışmasında regex ile extract edip farklı bir sütun oluşturduğum kodları ikinci defa çalıştırdığımda sütunun tüm değerleri "None"a dönüyor. Sebebi hakkında fikri olan var mı?
+
+
+----------------------------- --                ---------------------                --------------------          ----------------
+
+@channel Arkadaşlar :man-raising-hand::skin-tone-2:
+proje'lerde kullandığınız kendi yazdığınız güzel jenerik fonksiyonları bu kanaldan paylaşabilirsiniz.
+Bunlar çok faydalı şeyler. Bunları biriktiririz; böylece hem arşivimiz olur (GitHub vs) hem de herkes istifade eder. :slightly_smiling_face:
+Fonksiyon Festivalimiz başlasın diyor :tada::tada::tada::tada::tada: ve ilk fonksiyonları paylaşıyorum :
+1-
+def show_nans(df, limit):
+    missing = df.isnull().sum()*100/df.shape[0]
+    return missing.loc[lambda x : x > limit] 
+limit değerinden yüksek oranda missing value içeren sütunları sergiler. örneğin limit = 35 ise yüzde 35'den fazla missing value içeren sütunları görmenizi sağlar.
+
+iç içe liste halinde olan sütunların unique string değerlerini sergilemek için aşağıdaki iki fonkisyonu da sırasıyla çalıştırmak yeterli olucaktır. Daha önce belirttiğim gibi, bu unique değerler sizin analiz yapmanızı kolaylaştırmak ve kendiniz için kolaylık sağlaması açısından bilgi amaçlı kullanılabilir. Sonuca etki edecek ve olmazsa olmaz bir husus değil.
+2-
+önce bu çalıştırılarak nan içeren değerler boş listelere çevrilmeli ki diğer fonksiyon'da kullandığımız set() fonksiyonu işe yarasın.
+def Nan_to_list(data, column_name):
+    NaN_rows = data[column_name].isnull()
+    # Change the type of NaNs from 'float' to (empty) 'list'
+    data.loc[NaN_rows, column_name] = data.loc[NaN_rows, column_name].apply(lambda x: [])
+3-
+unique değerleri sergilemek için yukardaki fonksiyondan sonra bunu çalıştırmanız yeterli olucaktır.
+def unique_values(data, column_name):
+    unique_vals = set()
+    for rows in data[column_name]:
+        unique_vals.update(rows)
+    return list(unique_vals)
+
+
+
+

@@ -1,0 +1,16 @@
+def n_sil(x):
+    for i in range(0, len(x)):
+        if isinstance(x[i], list):
+            for a in x[i]:
+                if a == "\n":
+                    x[i].remove(a)
+                elif "\n" in a:
+                    x[i].remove(a)
+                    b = a.replace("\n", "")
+                    x[i].append(b)
+        elif isinstance(x[i], str):
+            x[i] = x[i].replace("\n", "")
+
+
+Örnek = n_sil(df["Nr. of Seats"]), ... n_sil(df[i]) v.b (edited) 
+

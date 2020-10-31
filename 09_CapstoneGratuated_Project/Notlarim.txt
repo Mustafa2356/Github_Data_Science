@@ -1,0 +1,6 @@
+df['vat'].value_counts()
+----------------------------
+VAT deductible      10980	KDV indirilebilir
+Price negotiable      426	Pazarlığa açık fiyat
+Name: vat, dtype: int64
+
